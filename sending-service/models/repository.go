@@ -1,9 +1,14 @@
 package models
 
 type AppRepository struct {
-	Helper HelperRepositoryIface
+	Helper     HelperRepositoryIface
+	Assignment AssignmentRepositoryIface
 }
 
 type HelperRepositoryIface interface {
 	CreateHelper(helper *Helper) error
+}
+
+type AssignmentRepositoryIface interface {
+	CreateAssignment(assignment *Assignment) error
 }

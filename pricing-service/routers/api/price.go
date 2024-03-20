@@ -59,3 +59,5 @@ func GetPrice(c *gin.Context) {
 		"price": price,
 	})
 }
+
+// API create price

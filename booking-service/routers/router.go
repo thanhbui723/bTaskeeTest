@@ -9,6 +9,7 @@ import (
 func InitRouter() *gin.Engine {
 	router := gin.Default()
 	router.POST("/api/jobs", api.CreateJob)
+	router.GET("/api/jobs/:id", api.GetJobByID)
 
 	return router
 }

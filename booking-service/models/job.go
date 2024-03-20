@@ -3,8 +3,10 @@ package models
 import (
 	"booking-service/package/util"
 	"context"
+	"fmt"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -33,7 +35,7 @@ func NewJobRepository(collection *mongo.Collection) *JobRepository {
 	}
 }
 
-func (r *JobRepository) CreateJob(job *Job) error {
+func (r *JobRepository) CreateJob(job *Job) (*Job, error) {
 	currentTime := int(time.Now().UnixMilli())
 	job.CreateAt = currentTime
 	job.UpdateAt = currentTime
@@ -41,8 +43,24 @@ func (r *JobRepository) CreateJob(job *Job) error {
 
 	_, err := r.Collection.InsertOne(context.Background(), job)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	newJob, err := r.GetJobByID(job.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return newJob, nil
+}
+
+func (r *JobRepository) GetJobByID(jobID primitive.ObjectID) (*Job, error) {
+	var job Job
+	fmt.Println("jobID: ", jobID)
+	err := r.Collection.FindOne(context.Background(), bson.M{"_id": jobID}).Decode(&job)
+	if err != nil {
+		return nil, err
+	}
+
+	return &job, nil
 }

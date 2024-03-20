@@ -29,7 +29,8 @@ func SetUp(connectionString, dbName string) error {
 
 	db = client.Database(dbName)
 	Repository = &AppRepository{
-		Helper: NewHelperRepository(db.Collection("helpers")),
+		Helper:     NewHelperRepository(db.Collection("helpers")),
+		Assignment: NewAssignmentRepository(db.Collection("assignments")),
 	}
 
 	return nil

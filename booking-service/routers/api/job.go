@@ -3,6 +3,7 @@ package api
 import (
 	"booking-service/models"
 	"booking-service/package/util"
+	"booking-service/services"
 	"fmt"
 	"net/http"
 	"time"
@@ -50,7 +51,7 @@ func CreateJob(c *gin.Context) {
 		Duration:    request.Duration,
 	}
 
-	err := models.Repository.Job.CreateJob(job)
+	newJob, err := models.Repository.Job.CreateJob(job)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error":   "Create job failed",
@@ -59,7 +60,29 @@ func CreateJob(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"job": request,
-	})
+	c.JSON(http.StatusCreated, newJob)
+}
+
+func GetJobByID(c *gin.Context) {
+	jobID := c.Param("id")
+
+	fmt.Println("jobID: ", jobID)
+	job, err := services.Job.GetJobByID(jobID)
+	if err != nil {
+		if err == services.ErrJobNotFound {
+			c.JSON(http.StatusNotFound, gin.H{
+				"error":   "Job not found",
+				"details": err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Get job failed",
+			"details": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, job)
 }
