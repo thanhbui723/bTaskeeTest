@@ -1,14 +1,13 @@
 package services
 
 import (
-	"pricing-service/models"
 	"time"
 )
 
 type PriceService struct{}
 
 type PriceServiceIface interface {
-	GetPriceByDateAndType(date time.Time, jobType string) (models.Price, error)
+	GetPriceByDateAndType(date time.Time, jobType string, priceType string, duration int) (int, error)
 }
 
 var Price PriceServiceIface

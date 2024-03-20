@@ -1,19 +1,19 @@
 package main
 
 import (
+	"booking-service/models"
+	"booking-service/package/util"
+	"booking-service/routers"
+	"booking-service/services"
 	"log"
 	"net/http"
-	"pricing-service/models"
-	"pricing-service/package/util"
-	"pricing-service/routers"
-	"pricing-service/services"
 
 	"github.com/go-playground/validator/v10"
 )
 
 func main() {
 	// Initialize database connection
-	err := models.SetUp("mongodb://localhost:27017", "pricing")
+	err := models.SetUp("mongodb://localhost:27017", "booking")
 	if err != nil {
 		log.Fatalf("Error initializing database: %v", err)
 	}
@@ -22,7 +22,7 @@ func main() {
 	router := routers.InitRouter()
 	util.Validator = validator.New()
 
-	err = http.ListenAndServe(":3000", router)
+	err = http.ListenAndServe(":3001", router)
 	if err != nil {
 		log.Fatal(err)
 	}

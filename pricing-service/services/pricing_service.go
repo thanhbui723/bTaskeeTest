@@ -1,15 +1,28 @@
 package services
 
 import (
+	"errors"
 	"pricing-service/models"
 	"time"
+
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func (s *PriceService) GetPriceByDateAndType(date time.Time, jobType string) (models.Price, error) {
-	price, err := models.Repository.Price.GetPriceByDateAndType(date, jobType)
+var (
+	ErrPriceNotFound = errors.New("price not found")
+)
+
+func (s *PriceService) GetPriceByDateAndType(date time.Time, jobType string, priceType string, duration int) (int, error) {
+	price, err := models.Repository.Price.GetPriceByDateAndType(date, jobType, priceType)
 	if err != nil {
-		return models.Price{}, err
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			return -1, ErrPriceNotFound
+		}
+
+		return -1, err
 	}
-	return price, nil
+
+	totalCost := price.Price * duration
+	return totalCost, nil
 
 }

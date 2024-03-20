@@ -7,6 +7,6 @@ type AppRepository struct {
 }
 
 type PriceRepositoryIface interface {
-	GetPriceByDateAndType(date time.Time, jobType string) (Price, error)
-	CreatePrice(price Price) error
+	GetPriceByDateAndType(date time.Time, jobType string, priceType string) (*Price, error)
+	CreatePrice(price *Price) error
 }

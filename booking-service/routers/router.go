@@ -1,14 +1,14 @@
 package routers
 
 import (
-	"pricing-service/routers/api"
+	"booking-service/routers/api"
 
 	"github.com/gin-gonic/gin"
 )
 
 func InitRouter() *gin.Engine {
 	router := gin.Default()
-	router.GET("/api/prices", api.GetPrice)
+	router.POST("/api/jobs", api.CreateJob)
 
 	return router
 }

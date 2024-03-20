@@ -29,7 +29,7 @@ func SetUp(connectionString, dbName string) error {
 
 	db = client.Database(dbName)
 	Repository = &AppRepository{
-		Price: NewPriceRepository(db.Collection("prices")),
+		Job: NewJobRepository(db.Collection("jobs")),
 	}
 
 	return nil
