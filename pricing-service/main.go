@@ -35,16 +35,34 @@ func main() {
 	router := routers.InitRouter()
 	util.Validator = validator.New()
 
+	// create data example
+	dateTest := time.Unix(int64(1710981711000), 0)
+	dateTest = util.RoundToDay(dateTest)
+
 	// create data helper example
 	priceExample := &models.Price{
-		Date:    time.Now(),
-		Name:    "Cleaning",
+		Date:    dateTest,
+		Name:    "Don dep nha",
 		Type:    util.NormalTime,
 		JobType: util.Cleaning,
 		Price:   100000,
 	}
 
+	// create data helper example
+	priceExample2 := &models.Price{
+		Date:    dateTest,
+		Name:    "Cham soc tre vao gio binh thuong",
+		Type:    util.NormalTime,
+		JobType: util.Babysitting,
+		Price:   100000,
+	}
+
 	err = models.Repository.Price.CreatePrice(priceExample)
+	if err != nil {
+		log.Fatalf("Create price failed: %v", err)
+	}
+
+	err = models.Repository.Price.CreatePrice(priceExample2)
 	if err != nil {
 		log.Fatalf("Create price failed: %v", err)
 	}

@@ -7,6 +7,7 @@ type AppRepository struct {
 
 type HelperRepositoryIface interface {
 	CreateHelper(helper *Helper) error
+	GetHelpers() ([]*Helper, error)
 }
 
 type AssignmentRepositoryIface interface {

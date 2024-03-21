@@ -16,6 +16,8 @@ type dtoAssignment struct {
 	HelperID string `json:"helper_id" validate:"required"`
 }
 
+// My idea: helper in sending-service can get list jobs matching
+//          And helper can use this API to assign this job
 func CreateAssignment(c *gin.Context) {
 	var request dtoAssignment
 	if err := c.ShouldBindJSON(&request); err != nil {
@@ -56,6 +58,7 @@ func CreateAssignment(c *gin.Context) {
 	fmt.Println("job: ", job)
 
 	// Get helper by helper_id to validate helper
+	// Implement 
 
 	err = services.Assignment.CreateAssignment(request.JobID, request.HelperID)
 	if err != nil {

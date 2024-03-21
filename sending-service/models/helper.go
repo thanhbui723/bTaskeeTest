@@ -4,6 +4,7 @@ import (
 	"context"
 	"time"
 
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -42,4 +43,27 @@ func (r *HelperRepository) CreateHelper(helper *Helper) error {
 	}
 
 	return nil
+}
+
+func (r *HelperRepository) GetHelpers() ([]*Helper, error) {
+    var helpers []*Helper
+
+    cursor, err := r.Collection.Find(context.Background(), bson.M{})
+    if err != nil {
+        return nil, err
+    }
+    defer cursor.Close(context.Background())
+
+    for cursor.Next(context.Background()) {
+        var helper *Helper
+        if err := cursor.Decode(&helper); err != nil {
+            return nil, err
+        }
+        helpers = append(helpers, helper)
+    }
+    if err := cursor.Err(); err != nil {
+        return nil, err
+    }
+
+    return helpers, nil
 }

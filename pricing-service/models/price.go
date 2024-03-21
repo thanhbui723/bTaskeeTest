@@ -49,6 +49,7 @@ func (r *PriceRepository) GetPriceByDateAndType(date time.Time, jobType string, 
 }
 
 func (r *PriceRepository) CreatePrice(price *Price) error {
+	price.ID = primitive.NewObjectID()
 	_, err := r.Collection.InsertOne(context.Background(), price)
 	if err != nil {
 		return err
